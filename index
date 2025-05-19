@@ -1,0 +1,57 @@
+@extends('layouts.frontoffice.homepage')
+
+
+@section('title', 'Dashboard')
+
+
+@section('content')
+
+    @php
+
+        $student = $data['student'];
+
+        $isActive = $student->registration->status_registrasi_id === 'A';
+
+        $hasSks = $data['totalSks'] >= $data['setting']->pengaturan_sks;
+
+
+        $hasKkm = true;
+
+        $hasNotValueKkm = true;
+
+
+        if($data['setting']->pengaturan_krs == 'ya') {
+
+            $hasKkm = !is_null($data['studyPlanKkm']);
+
+            $hasNotValueKkm = !empty($data['studyPlanKkm']->nilai_huruf_asal) ? (trim($data['studyPlanKkm']->nilai_huruf_asal) === "") : (trim($data['studyPlanKkm']->nilai_huruf) === "" || trim($data['studyPlanKkm']->nilai_huruf) == 'K');
+
+        }
+
+
+        $eligible = $isActive && $hasSks && $hasKkm && $hasNotValueKkm;
+
+        $statusColor = $eligible ? 'success' : 'red';
+
+    @endphp
+
+
+    <div class="container my-5">
+
+        <div class="main-content" style="min-height: 100vh">
+
+            <a class="d-flex justify-content-start mb-5 text-black text-decoration-none"
+
+                href="{{ route('dashboard.mahasiswa.index') }}">
+
+                <i class="fa-solid fa-angle-left fa-3x"></i>
+
+                <h4 class="fw-bold align-self-center ms-3 mb-0">Pendaftaran KKM</h4>
+
+            </a>
+
+
+            <div class="row gy-3">
+
+
+            
